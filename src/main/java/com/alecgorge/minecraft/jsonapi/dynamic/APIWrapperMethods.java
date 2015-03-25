@@ -15,9 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.BanList;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
@@ -54,14 +51,10 @@ import com.alecgorge.minecraft.jsonapi.chat.IRealisticChat;
 import com.alecgorge.minecraft.jsonapi.util.OfflinePlayerLoader;
 import com.alecgorge.minecraft.jsonapi.util.PropertiesFile;
 import com.alecgorge.minecraft.jsonapi.util.RecursiveDirLister;
-import com.alecgorge.minecraft.permissions.PermissionWrapper;
 
 public class APIWrapperMethods implements JSONAPIMethodProvider {
 	private Logger outLog = JSONAPI.instance.outLog;
-	public PermissionWrapper permissions;
 
-	public Economy econ;
-	public Chat chat;
 	public BukGetAPIMethods bukget;
 	public JSONAPIAPIMethods jsonapi;
 	public CommandMethods commands;
@@ -69,19 +62,7 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 	public APIWrapperMethods(Server server) {
 		bukget = new BukGetAPIMethods(server);
 		jsonapi = new JSONAPIAPIMethods(server);
-		permissions = new PermissionWrapper(server);
 		commands = new CommandMethods(server);
-
-		if (server.getPluginManager().getPlugin("Vault") != null) {
-			RegisteredServiceProvider<Economy> rsp = server.getServicesManager().getRegistration(Economy.class);
-			if (rsp != null) {
-				econ = rsp.getProvider();
-			}
-			RegisteredServiceProvider<Chat> rsp2 = server.getServicesManager().getRegistration(Chat.class);
-			if (rsp2 != null) {
-				chat = rsp2.getProvider();
-			}
-		}
 	}
 
 	private Server Server = JSONAPI.instance.getServer();

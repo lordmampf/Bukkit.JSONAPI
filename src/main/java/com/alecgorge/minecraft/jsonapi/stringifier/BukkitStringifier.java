@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -73,14 +71,8 @@ public class BukkitStringifier {
 		handle.put("JSONAPIGroup", JSONAPIGroup.class);
 		handle.put("JSONAPIPermissionNode", JSONAPIPermissionNode.class);
 		handle.put("Object[]", java.lang.Object[].class);
-		handle.put("AdminiumPushNotification", AdminiumPushNotification.class);
-		handle.put("Adminium3.AdminiumPushNotification", Adminium3.AdminiumPushNotification.class);
 		handle.put("Date", Date.class);
 		handle.put("Method", Method.class);
-
-		if (JSONAPI.instance.getServer().getPluginManager().getPlugin("Vault") != null) {
-			handle.put("EconomyResponse", net.milkbowl.vault.economy.EconomyResponse.class);
-		}
 	}
 
 	public static boolean canHandle(Class<?> c) {
@@ -307,32 +299,6 @@ public class BukkitStringifier {
 			return ((GameMode) obj).getValue();
 		} else if (obj instanceof Enchantment) {
 			return ((Enchantment) obj).getId();
-		} else if (JSONAPI.instance.getServer().getPluginManager().getPlugin("Vault") != null && obj instanceof EconomyResponse) {
-			JSONObject o = new JSONObject();
-			EconomyResponse r = (EconomyResponse) obj;
-
-			o.put("amount", r.amount);
-			o.put("balance", r.balance);
-			o.put("errorMessage", r.errorMessage);
-			o.put("type", r.type.toString());
-
-			return o;
-		} else if (obj instanceof Adminium3.AdminiumPushNotification) {
-			JSONObject o = new JSONObject();
-			Adminium3.AdminiumPushNotification not = (Adminium3.AdminiumPushNotification)obj;
-			
-			o.put("date", not.getDateSent());
-			o.put("message", not.getMessage());
-			
-			return o;			
-		} else if(obj instanceof AdminiumPushNotification) {
-			JSONObject o = new JSONObject();
-			AdminiumPushNotification not = (AdminiumPushNotification)obj;
-			
-			o.put("date", not.getDateSent());
-			o.put("message", not.getMessage());
-			
-			return o;
 		} else if (obj instanceof Date) {
 			return dateFormat.format((Date)obj);
 		} else if (obj instanceof Method) {

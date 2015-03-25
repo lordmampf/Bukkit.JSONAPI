@@ -1,143 +1,290 @@
 {
-    "name" : "Chat",
-    "namespace" : "chat",
-    "depends" : [
-        "JSONAPI", "Vault"
+    "name": "Chat (vault required) methods",
+    "depends": [
+        "JSONAPI"
     ],
-    "methods" : [
+    "methods": [
         {
-            "name":"isEnabled",
-            "call":"this.chat.isEnabled()",
-            "args":[
-                
-            ],
-            "desc":"Checks if chat methods are enabled.",
-            "returns":[
+            "call": "this.chat.isEnabled()",
+            "desc": "Checks if chat methods are enabled",
+            "returns": [
                 "boolean",
                 "Success or Failure"
+            ],
+            "name": "chat.enabled"
+        },
+        {
+            "call": "this.chat.getGroupPrefix(0, 1)",
+            "desc": "Get group prefix",
+            "returns": [
+                "String",
+                "Prefix"
+            ],
+            "name": "worlds.world.groups.group.prefix",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "group",
+                    "String",
+                    "group"
+                ]
             ]
         },
         {
-            "name":"getGroupPrefix",
-            "call":"this.chat.getGroupPrefix(0, 1)",
-            "args":[
-                ["String","World name"],
-                ["String","Group name"]
+            "call": "this.chat.getGroupSuffix(0, 1)",
+            "desc": "Get group suffix",
+            "returns": [
+                "String",
+                "Suffix"
             ],
-            "desc":"Get group prefix",
-            "returns":["String","Prefix"]
+            "name": "worlds.world.groups.group.suffix",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "group",
+                    "String",
+                    "group"
+                ]
+            ]
         },
         {
-            "name":"getGroupSuffix",
-            "call":"this.chat.getGroupSuffix(0, 1)",
-            "args":[
-                ["String","World name"],
-                ["String","Group name"]
+            "call": "this.chat.setGroupSuffix(0, 1, 2)",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "group",
+                    "String",
+                    "group"
+                ],
+                [
+                    "suffix",
+                    "String",
+                    "Suffix"
+                ]
             ],
-            "desc":"Get group suffix",
-            "returns":["String","Suffix"]
+            "desc": "Set group suffix",
+            "returns": [
+                "String",
+                "Suffix"
+            ],
+            "name": "worlds.world.groups.group.set_suffix"
         },
         {
-            "name":"setGroupSuffix",
-            "call":"this.chat.setGroupSuffix(0, 1, 2)",
-            "args":[
-                ["String","World name"],
-                ["String","Group name"],
-                ["String","Suffix"]
+            "call": "this.chat.setGroupPrefix(0, 1, 2)",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "group",
+                    "String",
+                    "group"
+                ],
+                [
+                    "prefix",
+                    "String",
+                    "Prefix"
+                ]
             ],
-            "desc":"Set group suffix",
-            "returns":["String","Suffix"]
+            "desc": "Set group prefix",
+            "returns": [
+                "String",
+                "Prefix"
+            ],
+            "name": "worlds.world.groups.group.set_prefix"
         },
         {
-            "name":"setGroupPrefix",
-            "call":"this.chat.setGroupPrefix(0, 1, 2)",
-            "args":[
-                ["String","World name"],
-                ["String","Group name"],
-                ["String","Prefix"]
+            "call": "this.chat.getPlayerPrefix(0, 1)",
+            "desc": "Get player prefix",
+            "returns": [
+                "String",
+                "Prefix"
             ],
-            "desc":"Set group prefix",
-            "returns":["String","Prefix"]
+            "name": "worlds.world.players.player.chat.prefix",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "player",
+                    "String",
+                    "player"
+                ]
+            ]
         },
         {
-            "name":"getPlayerPrefix",
-            "call":"this.chat.getPlayerPrefix(0, 1)",
-            "args":[
-                ["String","World name"],
-                ["String","Player name"]
+            "call": "this.chat.getPlayerSuffix(0, 1)",
+            "desc": "Get player suffix",
+            "returns": [
+                "String",
+                "Suffix"
             ],
-            "desc":"Get player prefix",
-            "returns":["String","Prefix"]
+            "name": "worlds.world.players.player.chat.suffix",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "player",
+                    "String",
+                    "player"
+                ]
+            ]
         },
         {
-            "name":"getPlayerSuffix",
-            "call":"this.chat.getPlayerSuffix(0, 1)",
-            "args":[
-                ["String","World name"],
-                ["String","Player name"]
+            "call": "this.chat.setPlayerSuffix(0, 1, 2)",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "player",
+                    "String",
+                    "player"
+                ],
+                [
+                    "suffix",
+                    "String",
+                    "Suffix"
+                ]
             ],
-            "desc":"Get player suffix",
-            "returns":["String","Suffix"]
+            "desc": "Set player suffix",
+            "returns": [
+                "String",
+                "Suffix"
+            ],
+            "name": "worlds.world.players.player.chat.set_suffix"
         },
         {
-            "name":"setPlayerSuffix",
-            "call":"this.chat.setPlayerSuffix(0, 1, 2)",
-            "args":[
-                ["String","World name"],
-                ["String","Player name"],
-                ["String","Suffix"]
+            "call": "this.chat.setPlayerPrefix(0, 1, 2)",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "player",
+                    "String",
+                    "player"
+                ],
+                [
+                    "prefix",
+                    "String",
+                    "Prefix"
+                ]
             ],
-            "desc":"Set player suffix",
-            "returns":["String","Suffix"]
+            "desc": "Set player prefix",
+            "returns": [
+                "String",
+                "Prefix"
+            ],
+            "name": "worlds.world.players.player.chat.set_prefix"
         },
         {
-            "name":"setPlayerPrefix",
-            "call":"this.chat.setPlayerPrefix(0, 1, 2)",
-            "args":[
-                ["String","World name"],
-                ["String","Player name"],
-                ["String","Prefix"]
+            "call": "this.chat.getPrimaryGroup(0, 1)",
+            "desc": "Get player primary group",
+            "returns": [
+                "String",
+                "Group name"
             ],
-            "desc":"Set player prefix",
-            "returns":["String","Prefix"]
+            "name": "worlds.world.players.player.chat.groups.primary",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "player",
+                    "String",
+                    "player"
+                ]
+            ]
         },
         {
-            "name":"getPrimaryGroup",
-            "call":"this.chat.getPrimaryGroup(0, 1)",
-            "args":[
-                ["String","World name"],
-                ["String","Player name"]
+            "call": "this.chat.playerInGroup(0, 2, 1)",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "group",
+                    "String",
+                    "group"
+                ],
+                [
+                    "player",
+                    "String",
+                    "Player name"
+                ],
+                [
+                    "group",
+                    "String",
+                    "Group name"
+                ]
             ],
-            "desc":"Get player primary group",
-            "returns":["String","Group name"]
+            "desc": "Check if player is member of a group",
+            "returns": [
+                "boolean",
+                "Success or Failure"
+            ],
+            "name": "worlds.world.chat.groups.group.has_player"
         },
         {
-            "name":"playerInGroup",
-            "call":"this.chat.playerInGroup(0, 1, 2)",
-            "args":[
-                ["String","World name"],
-                ["String","Player name"],
-                ["String","Group name"]
+            "call": "this.chat.getGroups()",
+            "args": [
+
             ],
-            "desc":"Check if player is member of a group.",
-            "returns":["boolean","Success or Failure"]
+            "desc": "Returns a list of all known groups",
+            "returns": [
+                "String[]",
+                "A list of all known groups"
+            ],
+            "name": "chat.groups"
         },
         {
-            "name":"getGroups",
-            "call":"this.chat.getGroups()",
-            "args":[],
-            "desc":"Returns a list of all known groups",
-            "returns":["String[]","A list of all known groups."]
-        },
-        {
-            "name":"getPlayerGroups",
-            "call":"this.chat.getPlayerGroups(0, 1)",
-            "args":[
-                ["String","World name"],
-                ["String","Player name"]
+            "call": "this.chat.getPlayerGroups(0, 1)",
+            "desc": "Gets the list of groups that this player has",
+            "returns": [
+                "String[]",
+                "A list of all known groups for a user"
             ],
-            "desc":"Gets the list of groups that this player has",
-            "returns":["String[]","A list of all known groups for a user."]
+            "name": "worlds.world.players.player.chat.groups",
+            "args": [
+                [
+                    "world",
+                    "String",
+                    "world"
+                ],
+                [
+                    "player",
+                    "String",
+                    "player"
+                ]
+            ]
         }
     ]
 }

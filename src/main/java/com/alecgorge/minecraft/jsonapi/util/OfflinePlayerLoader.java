@@ -2,7 +2,7 @@ package com.alecgorge.minecraft.jsonapi.util;
 
 import java.util.UUID;
 
-import net.minecraft.server.v1_8_R1.EntityPlayer;
+import net.minecraft.server.v1_8_R2.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -13,8 +13,8 @@ import com.mojang.authlib.GameProfile;
 //$import net.minecraft.server./*$mcversion$*/.*;
 //$import org.bukkit.craftbukkit./*$mcversion$*/.*;
 //#else
-import net.minecraft.server.v1_8_R1.*;
-import org.bukkit.craftbukkit.v1_8_R1.*;
+import net.minecraft.server.v1_8_R2.*;
+import org.bukkit.craftbukkit.v1_8_R2.*;
 //#endif
 
 public class OfflinePlayerLoader {

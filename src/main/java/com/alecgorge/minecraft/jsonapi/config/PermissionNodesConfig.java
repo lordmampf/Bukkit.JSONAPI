@@ -13,7 +13,7 @@ public class PermissionNodesConfig extends Config {
 	public Map<String, Map<String, List<String>>> permissions = new HashMap<String, Map<String, List<String>>>();
 	
 	public PermissionNodesConfig(Plugin plugin) {
-		CONFIG_STREAM = plugin.getResource("permission_nodes.yml");
+		CONFIG_STREAM = plugin.getResource("permissions.yml");
 		CONFIG_HEADER = "JSONAPI v4 permissions file";
 	}
 	

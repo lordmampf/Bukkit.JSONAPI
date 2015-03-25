@@ -23,7 +23,6 @@ import org.json.simpleForBukkit.parser.ParseException;
 
 import com.alecgorge.java.http.MutableHttpRequest;
 import com.alecgorge.minecraft.jsonapi.api.v2.APIv2Handler;
-import com.alecgorge.minecraft.jsonapi.api.v2.EssentialsAPIMethods;
 import com.alecgorge.minecraft.jsonapi.api.v2.StandardAPIMethods;
 import com.alecgorge.minecraft.jsonapi.config.UsersConfig;
 import com.alecgorge.minecraft.jsonapi.dynamic.APIWrapperMethods;
@@ -101,7 +100,6 @@ public class JSONServer extends NanoHTTPD {
 				}
 				
 				caller.registerMethods(APIWrapperMethods.getInstance());
-				new EssentialsAPIMethods(inst);
 				new StandardAPIMethods(inst);
 				
 				outLog.info("[JSONAPI] " + caller.methodCount + " methods loaded in " + caller.methods.size() + " namespaces.");
