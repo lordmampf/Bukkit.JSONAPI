@@ -1,12 +1,15 @@
+#OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+#Java
 test/
 builds/
 target/
 release/
 bin/
-deps/craftbukkit.jar
 *~
 *.lock
-*.DS_Store
 *.swp
 *.out
 !*.dll
