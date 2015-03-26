@@ -683,6 +683,47 @@
                 ]
             ],
             "name": "players.name.teleport_world"
+        },
+        {
+            "desc": "Gets a player's inventory.",
+            "returns": [
+                "Inventory",
+                "Inventory of the player."
+            ],
+            "call": "this.getPlayerInventory(0)",
+            "args": [
+                [
+                    "name",
+                    "String",
+                    "name"
+                ]
+            ],
+            "name": "players.name.inventory"
+        },
+        {
+            "desc": "Gets a player's location.",
+            "returns": [
+                "Location",
+                "Location of the player."
+            ],
+            "call": "this.getPlayerLocation(0)",
+            "args": [
+                [
+                    "name",
+                    "String",
+                    "name"
+                ]
+            ],
+            "name": "players.name.location"
+        },
+        {
+            "desc": "Gets location of online players.",
+            "returns": [
+                "Location",
+                "Locations of current online players."
+            ],
+            "call": "this.getPlayerLocations()",
+            "name": "players.online.locations"
         }
     ]
 }

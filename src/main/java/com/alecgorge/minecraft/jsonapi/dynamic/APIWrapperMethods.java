@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.bukkit.BanList;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -33,15 +32,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.material.MaterialData;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.java_websocket.util.Base64;
 import org.json.simpleForBukkit.JSONObject;
 
 import com.alecgorge.minecraft.jsonapi.APIException;
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
-import com.alecgorge.minecraft.jsonapi.McRKit.api.RTKInterface.CommandType;
-import com.alecgorge.minecraft.jsonapi.McRKit.api.RTKInterfaceException;
-import com.alecgorge.minecraft.jsonapi.api.BukGetAPIMethods;
 import com.alecgorge.minecraft.jsonapi.api.CommandMethods;
 import com.alecgorge.minecraft.jsonapi.api.JSONAPIAPIMethods;
 import com.alecgorge.minecraft.jsonapi.api.JSONAPIStreamMessage;
@@ -49,18 +44,17 @@ import com.alecgorge.minecraft.jsonapi.chat.BukkitForgeRealisticChat;
 import com.alecgorge.minecraft.jsonapi.chat.BukkitRealisticChat;
 import com.alecgorge.minecraft.jsonapi.chat.IRealisticChat;
 import com.alecgorge.minecraft.jsonapi.util.OfflinePlayerLoader;
+import com.alecgorge.minecraft.jsonapi.util.PlayerLocation;
 import com.alecgorge.minecraft.jsonapi.util.PropertiesFile;
 import com.alecgorge.minecraft.jsonapi.util.RecursiveDirLister;
 
 public class APIWrapperMethods implements JSONAPIMethodProvider {
 	private Logger outLog = JSONAPI.instance.outLog;
 
-	public BukGetAPIMethods bukget;
 	public JSONAPIAPIMethods jsonapi;
 	public CommandMethods commands;
 
 	public APIWrapperMethods(Server server) {
-		bukget = new BukGetAPIMethods(server);
 		jsonapi = new JSONAPIAPIMethods(server);
 		commands = new CommandMethods(server);
 	}
@@ -217,6 +211,24 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 			return true;
 		} catch (NullPointerException e) {
 			return false;
+		}
+	}
+
+	public PlayerLocation getPlayerLocation(String playerName) {
+		try {
+			Player p = getPlayerExact(playerName);
+			return new PlayerLocation(p, p.getLocation());
+		} catch (NullPointerException e) {
+			return null;
+		}
+	}
+
+	public PlayerInventory getPlayerInventory(String playerName) {
+		try {
+			Player p = getPlayerExact(playerName);
+			return p.getInventory();
+		} catch (NullPointerException e) {
+			return null;
 		}
 	}
 
@@ -982,26 +994,6 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		return getConnectionLogs(-1);
 	}
 
-	boolean isRTKloaded = false;
-
-	// RTK methods
-	public boolean restartServer() throws IOException, RTKInterfaceException {
-		JSONAPI.instance.rtkAPI.executeCommand(CommandType.RESTART, null);
-		return true;
-	}
-
-	public boolean stopServer() throws IOException, RTKInterfaceException {
-		JSONAPI.instance.rtkAPI.executeCommand(CommandType.HOLD_SERVER, null);
-		return true;
-	}
-
-	public boolean rescheduleServerRestart(String format) throws IOException, RTKInterfaceException {
-		JSONAPI.instance.rtkAPI.executeCommand(CommandType.RESCHEDULE_RESTART, format);
-		return true;
-	}
-
-	// end RTK methods
-
 	public List<String> getDirectory(String path) {
 		try {
 			File dir = new File(path);
@@ -1089,6 +1081,16 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 
 		return o;
+	}
+
+	public List<PlayerLocation> getPlayerLocations() {
+		List<PlayerLocation> names = new ArrayList<PlayerLocation>();
+
+		for (Player p : Server.getOnlinePlayers()) {
+			names.add(new PlayerLocation(p, p.getLocation()));
+		}
+
+		return names;
 	}
 
 	public boolean ban(String playerName) {

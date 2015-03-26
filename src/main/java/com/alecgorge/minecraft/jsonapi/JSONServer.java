@@ -57,7 +57,7 @@ public class JSONServer extends NanoHTTPD {
 		inst = plugin;
 
 		caller = new Caller(inst);
-		caller.loadFile(new File(inst.getDataFolder() + File.separator + "methods.json"), false);
+		caller.loadFile(new File(inst.getDataFolder() + File.separator + "methods.json"));
 		
 		outLog.info("[JSONAPI] Loaded methods.json.");
 
@@ -87,16 +87,16 @@ public class JSONServer extends NanoHTTPD {
 
 				if (files != null && files.length > 0) {
 					for (File f : files) {
-						caller.loadFile(f, false);
+						caller.loadFile(f);
 					}
 				}
 				
-				String[] methodsFiles = new String[] { "chat.json", "dynmap.json", "econ.json", "fs.json", "permissions.json",
-													   "players.json", "plugins.json", "remotetoolkit.json", "server.json",
+				String[] methodsFiles = new String[] { "chat.json", "permissions.json",
+													   "players.json", "plugins.json", "server.json",
 													   "streams.json", "system.json", "worlds.json", "jsonapi.json" };
 				
 				for(String m : methodsFiles) {
-					caller.loadInputStream(inst.getResource("jsonapi4/methods/" + m), true);
+					caller.loadInputStream(inst.getResource("methods/" + m));
 				}
 				
 				caller.registerMethods(APIWrapperMethods.getInstance());
@@ -202,10 +202,9 @@ public class JSONServer extends NanoHTTPD {
 		try {
 			boolean valid = false;
 			for (Map<String, Object> user : logins.getUsers()) {
-				String thishash = JSONAPI.SHA256(user.get("username") + method + user.get("password") + inst.salt);
 				String saltless = JSONAPI.SHA256(user.get("username") + method + user.get("password"));
 
-				if (thishash.equals(hash) || saltless.equals(hash)) {
+				if (saltless.equals(hash)) {
 					valid = true;
 					break;
 				}

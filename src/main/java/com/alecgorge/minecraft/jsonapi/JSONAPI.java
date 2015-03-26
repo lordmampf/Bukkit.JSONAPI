@@ -13,10 +13,8 @@ import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -46,9 +44,6 @@ import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.java_websocket.server.DefaultSSLWebSocketServerFactory;
 
-import com.alecgorge.minecraft.jsonapi.McRKit.api.RTKInterface;
-import com.alecgorge.minecraft.jsonapi.adminium.Adminium3;
-import com.alecgorge.minecraft.jsonapi.adminium.PushNotificationDaemon;
 import com.alecgorge.minecraft.jsonapi.api.JSONAPICallHandler;
 import com.alecgorge.minecraft.jsonapi.api.JSONAPIStream;
 import com.alecgorge.minecraft.jsonapi.api.StreamPusher;
@@ -85,9 +80,7 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 
 	public boolean logging = false;
 	public String logFile = "false";
-	public String salt = "";
 	public int port = 20059;
-	public boolean allowSendingOldStreamMessages = true;
 	private long startupDelay = 2000;
 	public List<String> whitelist = new ArrayList<String>();
 	public List<String> method_noauth_whitelist = new ArrayList<String>();
@@ -95,9 +88,8 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 	public boolean anyoneCanUseCallAdmin = true;
 	public String serverName = "default";
 	public StreamPusher streamPusher;
-	public boolean useGroups = false;
+	public boolean useGroups = true;
 	TickRateCounter tickRateCounter;
-	public boolean adminiumEnabled = true;
 	
 	RouteMatcher router = new RouteMatcher();
 
@@ -105,15 +97,11 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 	public Logger outLog = Logger.getLogger("JSONAPI");
 	private Handler handler;
 
-	public RTKInterface rtkAPI = null;
 	public InetAddress bindAddress;
 
 	// for dynamic access
 	public static JSONAPI instance;
 
-	PushNotificationDaemon adminium;
-	Adminium3 adminium3;
-	
 	GroupManager groupManager;
 	
 	JSONAPINettyInjector injector = null;
@@ -165,11 +153,11 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 	}
 
 	public void registerMethod(String method) {
-		getJSONServer().getCaller().loadString("[" + method + "]", false);
+		getJSONServer().getCaller().loadString("[" + method + "]");
 	}
 
 	public void registerMethods(String method) {
-		getJSONServer().getCaller().loadString(method, false);
+		getJSONServer().getCaller().loadString(method);
 	}
 
 	public synchronized Caller getCaller() {
@@ -290,8 +278,6 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 		catch (Exception e) {}
 
 
-		boolean rtkInstalled = Bukkit.getPluginManager().getPlugin("RemoteToolkitPlugin") != null;
-		
 		try {
 			auth = new UsersConfig(this);
 
@@ -303,7 +289,6 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 
 			File methods = new File(getDataFolder(), "methods.json");
 			File methodsFolder = new File(getDataFolder(), "methods");
-			File rtkConfig = new File(getDataFolder(), "config_rtk.yml");
 			File groups = new File(getDataFolder(), "groups.yml");
 
 			if (!methods.exists()) {
@@ -325,7 +310,7 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 				methodsFolder.mkdirs();
 			}
 			
-			String[] methodsFiles = new String[] { "chat.json", "permissions.json", "fs.json", "readme.txt", "system.json", "world.json" };
+			String[] methodsFiles = new String[] { "chat.json", "jsonapi.json", "permissions.json", "players.json", "plugins.json", "server.json", "streams.json", "system.json", "worlds.json" };
 
 			for (String f : methodsFiles) {
 				File outF = new File(methodsFolder, f);
@@ -363,23 +348,6 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 
 				log.info("[JSONAPI] config.yml has been copied from the jar");
 			}
-			if (rtkInstalled && !rtkConfig.exists()) {
-				rtkConfig.createNewFile();
-
-				InputStream in = getResource("config_rtk.yml");
-				OutputStream out = new FileOutputStream(rtkConfig);
-
-				byte[] buffer = new byte[1024];
-				int len;
-				while ((len = in.read(buffer)) != -1) {
-					out.write(buffer, 0, len);
-				}
-
-				in.close();
-				out.close();
-
-				log.info("[JSONAPI] config_rtk.yml has been copied from the jar");
-			}
 			if (!groups.exists()) {
 				groups.createNewFile();
 
@@ -405,7 +373,7 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 				yamlConfig = new YamlConfiguration();
 				yamlConfig.load(yamlFile); // VERY IMPORTANT
 				
-				yamlConfig.addDefault("method-whitelist", new String[]{ "getPlayerLimit", "dynmap.getPort"} );
+				yamlConfig.addDefault("method-whitelist", new String[]{ "getPlayerLimit"} );
 				
 				MemoryConfiguration stream_pusher_config = new MemoryConfiguration();
 				stream_pusher_config.addDefault("max_queue_age", 30);
@@ -426,20 +394,9 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 				max_queue_age = yamlConfig.getInt("max_queue_age", 30);
 				max_queue_length = yamlConfig.getInt("max_queue_length", 500);
 
-				salt = yamlConfig.getString("options.salt", "");
 				port = yamlConfig.getInt("options.port", 20059);
 				startupDelay = yamlConfig.getInt("options.startup-delay", 2000);
-				anyoneCanUseCallAdmin = yamlConfig.getBoolean("options.anyone-can-use-calladmin", false);
-				allowSendingOldStreamMessages = yamlConfig.getBoolean("options.send-previous-stream-messages", true);
 				serverName = getServer().getServerName();
-				adminiumEnabled = yamlConfig.getBoolean("options.adminium-push-enabled", true);
-				if(yamlConfig.contains("options.use-new-api")) {
-					useGroups = yamlConfig.getBoolean("options.use-new-api", false);
-				}
-				else {
-					yamlConfig.set("options.use-new-api", false);
-					yamlConfig.save(yamlFile);
-				}
 
 				String host = yamlConfig.getString("options.bind-address", "");
 				if (host.equals("")) {
@@ -496,25 +453,6 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 				}
 			}
 			
-			if (rtkInstalled) {
-				YamlConfiguration yamlRTK = new YamlConfiguration();
-	
-				try {
-					yamlRTK.load(rtkConfig);
-					
-					Properties rtkProps = new Properties();
-					rtkProps.load(new FileInputStream("toolkit/remote.properties"));
-					
-					int port = Integer.parseInt(rtkProps.getProperty("remote-control-port"));
-					String salt = rtkProps.getProperty("auth-salt");
-					
-					rtkAPI = new RTKInterface(port, "localhost", yamlRTK.getString("RTK.username"), yamlRTK.getString("RTK.password"), salt);
-					
-				} catch (Exception e) {
-					// e.printStackTrace();
-				}
-			}
-
 			if (!logging) {
 				outLog.setUseParentHandlers(false);
 				for (Handler h : outLog.getHandlers()) {
@@ -563,9 +501,6 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 
 			initialiseListeners();
 
-			adminium = new PushNotificationDaemon(new File(getDataFolder(), "adminium.yml"), this);
-			adminium3 = new Adminium3(this);
-						
 			tickRateCounter = new TickRateCounter(this);
 			
 			injector = new JSONAPINettyInjector(this);
@@ -605,15 +540,6 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 			 * System.out.println(sender.getName() + ": " +
 			 * join(Arrays.asList(args), " ")); return true; }
 			 */
-		}
-		if (args.length >= 1 && cmd.getName().equals("calladmin")) {
-			adminium3.calladmin(sender, join(Arrays.asList(args), " "));
-			
-			// adminium 2.x
-			if(adminium.init)
-				adminium.calladmin(sender, join(Arrays.asList(args), " "));
-			
-			return true;
 		}
 
 		if (cmd.getName().equals("jsonapi") && (sender.hasPermission("jsonapi.command") || sender instanceof ConsoleCommandSender)) {

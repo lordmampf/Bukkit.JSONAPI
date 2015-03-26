@@ -32,11 +32,10 @@ import org.json.simpleForBukkit.JSONArray;
 import org.json.simpleForBukkit.JSONObject;
 
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
-import com.alecgorge.minecraft.jsonapi.adminium.Adminium3;
-import com.alecgorge.minecraft.jsonapi.adminium.PushNotificationDaemon.AdminiumPushNotification;
 import com.alecgorge.minecraft.jsonapi.config.JSONAPIPermissionNode;
 import com.alecgorge.minecraft.jsonapi.permissions.JSONAPIGroup;
 import com.alecgorge.minecraft.jsonapi.permissions.JSONAPIUser;
+import com.alecgorge.minecraft.jsonapi.util.PlayerLocation;
 import com.alecgorge.minecraft.jsonapi.dynamic.Argument;
 import com.alecgorge.minecraft.jsonapi.dynamic.Method;
 
@@ -261,6 +260,35 @@ public class BukkitStringifier {
 			o.put("yaw", l.getYaw());
 
 			return o;
+		} else if (obj instanceof PlayerLocation) {
+			PlayerLocation l = (PlayerLocation) obj;
+
+			JSONObject o = new JSONObject();
+
+			o.put("name", l.Player.getName());
+			o.put("x", l.Location.getX());
+			o.put("y", l.Location.getY());
+			o.put("z", l.Location.getZ());
+			o.put("pitch", l.Location.getPitch());
+			o.put("yaw", l.Location.getYaw());
+
+			return o;
+		} else if (obj instanceof PlayerLocation[]) {
+			PlayerLocation[] al = (PlayerLocation[]) obj;
+
+			JSONArray a = new JSONArray();
+			for(PlayerLocation l : al) {
+				JSONObject o = new JSONObject();
+				o.put("name", l.Player.getName());
+				o.put("x", l.Location.getX());
+				o.put("y", l.Location.getY());
+				o.put("z", l.Location.getZ());
+				o.put("pitch", l.Location.getPitch());
+				o.put("yaw", l.Location.getYaw());
+				a.add(o);
+			}
+
+			return a;
 		} else if (obj instanceof Plugin[]) {
 			List<Plugin> l = Arrays.asList((Plugin[]) obj);
 

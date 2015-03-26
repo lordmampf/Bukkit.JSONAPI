@@ -808,6 +808,12 @@
 			"call":"this.getPlayerNames()"
 		},
 		{
+			"name":"getPlayerLocations",
+			"desc":"Retrieves an array of the locations of all the players currently on the server.",
+			"returns":["PlayerLocation[]", "The players' locations."],
+			"call":"this.getPlayerLocations()"
+		},
+		{
 			"name":"getOnlinePlayerNamesInWorld",
 			"desc":"Retrieves an array of the names of all the players currently in the given world.",
 			"returns":["String[]", "The players' names."],
@@ -851,6 +857,24 @@
 				["int", "The x-coord of the block."],
 				["int", "The y-coord of the block."],
 				["int", "The z-coord of the block."]
+			]
+		},
+		{
+			"name": "getPlayerInventory",
+			"desc": "Gets a player's inventory.",
+			"returns": ["PlayerInventory", "Inventory of the player."],
+			"call": "this.getPlayerInventory(0)",
+			"args": [
+				["String", "The inventory name."]
+			]
+		},
+		{
+			"name": "getPlayerLocation",
+			"desc": "Gets a player's location.",
+			"returns": ["PlayerLocation", "Location of the player."],
+			"call": "this.getPlayerLocation(0)",
+			"args": [
+				["String", "The player's name."]
 			]
 		}
 	]

@@ -1,10 +1,10 @@
-name: Bukkit.JSONAPI
+name: JSONAPI
 main: com.alecgorge.minecraft.jsonapi.JSONAPI
 version: 1.0.0
 description: Control your server and fetch information from your server.
 website: http://mcjsonapi.com/
 author: Dirk Sarodnick
-depend: []
+depend: [ProtocolLib]
 softdepend: []
 commands:
   jsonapi-list:

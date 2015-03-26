@@ -179,25 +179,6 @@ public class Caller implements JSONAPIMethodProvider {
 			name = "jsonapi.methods",
 			returnDescription = "Returns details about API methods provided by default with JSONAPI."
 	)
-	public List<Method> getAllV2APIMethods() {
-		List<Method> m = new ArrayList<Method>();
-		for (String key : methods.keySet()) {
-			for (Method meth : methods.get(key).values()) {
-				if (meth.isProvidedByV2API()) {
-					m.add(meth);
-				}
-			}
-		}
-		
-		Collections.sort(m, new Comparator<Method>() {
-			@Override
-			public int compare(Method o1, Method o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-
-		return m;
-	}
 	
 	public List<String> getAllMethods() {
 		List<String> r = new ArrayList<String>();
@@ -211,17 +192,17 @@ public class Caller implements JSONAPIMethodProvider {
 		return r;
 	}
 
-	public void loadFile(File methodsFile, boolean jsonapi4) {
+	public void loadFile(File methodsFile) {
 		try {
-			magicWithMethods(p.parse(new FileReader(methodsFile)), jsonapi4);
+			magicWithMethods(p.parse(new FileReader(methodsFile)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void loadInputStream(InputStream methodsFile, boolean jsonapi4) {
+	public void loadInputStream(InputStream methodsFile) {
 		try {
-			magicWithMethods(p.parse(new InputStreamReader(methodsFile)), jsonapi4);
+			magicWithMethods(p.parse(new InputStreamReader(methodsFile)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -239,7 +220,7 @@ public class Caller implements JSONAPIMethodProvider {
 		handlers.remove(handler);
 	}
 
-	private void magicWithMethods(Object raw, boolean jsonapi4) throws Exception {
+	private void magicWithMethods(Object raw) throws Exception {
 		if (raw instanceof JSONObject) {
 			JSONObject methods = (JSONObject) raw;
 			String name = "";
@@ -270,7 +251,7 @@ public class Caller implements JSONAPIMethodProvider {
 						outLog.info("[JSONAPI] " + name + " cannot be loaded because it depends on a plugin that is not installed: '" + plugin + "'");
 					} else if (plugin.equals("JSONAPI") || p.isEnabled()) {
 						if (methods.containsKey("methods")) {
-							proccessMethodsWithNamespace((JSONArray) methods.get("methods"), methods.containsKey("namespace") ? methods.get("namespace").toString() : "", jsonapi4);
+							proccessMethodsWithNamespace((JSONArray) methods.get("methods"), methods.containsKey("namespace") ? methods.get("namespace").toString() : "");
 						} else {
 							throw new Exception("A JSON file is not well formed: missing the key 'methods' for the root object.");
 						}
@@ -280,13 +261,13 @@ public class Caller implements JSONAPIMethodProvider {
 				}
 			}
 		} else if (raw instanceof JSONArray) {
-			proccessMethodsWithNamespace((JSONArray) raw, "", jsonapi4);
+			proccessMethodsWithNamespace((JSONArray) raw, "");
 		} else {
 			throw new Exception("JSON file is not a valid methods file.");
 		}
 	}
 
-	public void proccessMethodsWithNamespace(JSONArray methods, String namespace, boolean jsonapi4) {
+	public void proccessMethodsWithNamespace(JSONArray methods, String namespace) {
 		for (Object o : methods) {
 			if (o instanceof JSONObject) {
 				String name = ((JSONObject) o).get("name").toString();
@@ -300,14 +281,14 @@ public class Caller implements JSONAPIMethodProvider {
 				}
 
 				methodCount++;
-				this.methods.get(namespace).put(name, new Method((JSONObject) o, jsonapi4));
+				this.methods.get(namespace).put(name, new Method((JSONObject) o));
 			}
 		}
 	}
 
-	public void loadString(String methodsString, boolean jsonapi4) {
+	public void loadString(String methodsString) {
 		try {
-			magicWithMethods(p.parse(methodsString), jsonapi4);
+			magicWithMethods(p.parse(methodsString));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
