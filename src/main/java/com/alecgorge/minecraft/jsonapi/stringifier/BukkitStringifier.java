@@ -60,6 +60,8 @@ public class BukkitStringifier {
 		handle.put("File", java.io.File.class);
 		handle.put("ItemStack[]", org.bukkit.inventory.ItemStack[].class);
 		handle.put("PlayerInventory", org.bukkit.inventory.PlayerInventory.class);
+		handle.put("PlayerLocation", com.alecgorge.minecraft.jsonapi.util.PlayerLocation.class);
+		handle.put("PlayerLocation[]", com.alecgorge.minecraft.jsonapi.util.PlayerLocation[].class);
 		handle.put("Inventory", org.bukkit.inventory.Inventory.class);
 		handle.put("Location", org.bukkit.Location.class);
 		handle.put("World.Environment", org.bukkit.World.Environment.class);
@@ -110,7 +112,7 @@ public class BukkitStringifier {
 			o.put("itemInHand", p.getItemInHand());
 			o.put("location", p.getLocation());
 			o.put("inventory", p.getInventory());
-			// o.put("enderchest", p.getEnderChest());
+			
 			o.put("sneaking", p.isSneaking());
 			o.put("sprinting", p.isSprinting());
 			o.put("inVehicle", p.isInsideVehicle());
@@ -263,29 +265,35 @@ public class BukkitStringifier {
 		} else if (obj instanceof PlayerLocation) {
 			PlayerLocation l = (PlayerLocation) obj;
 
+			JSONObject p = new JSONObject();
+			p.put("name", l.Player.getName());
+			
 			JSONObject o = new JSONObject();
-
-			o.put("name", l.Player.getName());
 			o.put("x", l.Location.getX());
 			o.put("y", l.Location.getY());
 			o.put("z", l.Location.getZ());
 			o.put("pitch", l.Location.getPitch());
 			o.put("yaw", l.Location.getYaw());
+			p.put("location", o);
 
-			return o;
+			return p;
 		} else if (obj instanceof PlayerLocation[]) {
 			PlayerLocation[] al = (PlayerLocation[]) obj;
 
 			JSONArray a = new JSONArray();
 			for(PlayerLocation l : al) {
+				JSONObject p = new JSONObject();
+				p.put("name", l.Player.getName());
+				
 				JSONObject o = new JSONObject();
-				o.put("name", l.Player.getName());
 				o.put("x", l.Location.getX());
 				o.put("y", l.Location.getY());
 				o.put("z", l.Location.getZ());
 				o.put("pitch", l.Location.getPitch());
 				o.put("yaw", l.Location.getYaw());
-				a.add(o);
+				p.put("location", o);
+				
+				a.add(p);
 			}
 
 			return a;

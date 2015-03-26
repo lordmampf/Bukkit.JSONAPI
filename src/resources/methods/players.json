@@ -703,7 +703,7 @@
         {
             "desc": "Gets a player's location.",
             "returns": [
-                "Location",
+                "PlayerLocation",
                 "Location of the player."
             ],
             "call": "this.getPlayerLocation(0)",
@@ -719,11 +719,11 @@
         {
             "desc": "Gets location of online players.",
             "returns": [
-                "Location",
+                "PlayerLocation[]",
                 "Locations of current online players."
             ],
             "call": "this.getPlayerLocations()",
-            "name": "players.online.locations"
+            "name": "players.online.location"
         }
     ]
 }
