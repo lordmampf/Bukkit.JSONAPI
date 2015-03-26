@@ -814,6 +814,18 @@
 			"call":"this.getPlayerLocations()"
 		},
 		{
+			"name":"getOnlinePlayerSpawns",
+			"desc":"Retrieves an array of the spawn points of all the online players.",
+			"returns":["PlayerLocation[]", "The players' spawn points."],
+			"call":"this.getOnlinePlayerSpawns()"
+		},
+		{
+			"name":"getOfflinePlayerSpawns",
+			"desc":"Retrieves an array of the spawn points of all the offline players.",
+			"returns":["PlayerLocation[]", "The players' spawn points."],
+			"call":"this.getOfflinePlayerSpawns()"
+		},
+		{
 			"name":"getOnlinePlayerNamesInWorld",
 			"desc":"Retrieves an array of the names of all the players currently in the given world.",
 			"returns":["String[]", "The players' names."],

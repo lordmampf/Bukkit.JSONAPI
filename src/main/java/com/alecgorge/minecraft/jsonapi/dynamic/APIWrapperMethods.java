@@ -1088,6 +1088,26 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		return names;
 	}
 
+	public List<PlayerLocation> getOnlinePlayerSpawns() {
+		List<PlayerLocation> names = new ArrayList<PlayerLocation>();
+
+		for (Player p : Server.getOnlinePlayers()) {
+			names.add(new PlayerLocation(p, p.getBedSpawnLocation()));
+		}
+
+		return names;
+	}
+
+	public List<PlayerLocation> getOfflinePlayerSpawns() {
+		List<PlayerLocation> names = new ArrayList<PlayerLocation>();
+
+		for (OfflinePlayer p : Server.getOfflinePlayers()) {
+			names.add(new PlayerLocation(p, p.getBedSpawnLocation()));
+		}
+
+		return names;
+	}
+
 	public boolean ban(String playerName) {
 		return banWithReason(playerName, "Banned by admin.");
 	}

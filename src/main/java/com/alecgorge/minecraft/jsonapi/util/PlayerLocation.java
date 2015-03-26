@@ -1,15 +1,15 @@
 package com.alecgorge.minecraft.jsonapi.util;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 public class PlayerLocation {
-	public PlayerLocation(Player player, Location location) {
+	public PlayerLocation(OfflinePlayer player, Location location) {
 		this.Player = player;
 		this.Location = location;
 	}
 	
-	public Player Player;
+	public OfflinePlayer Player;
 	
 	public Location Location;
 }

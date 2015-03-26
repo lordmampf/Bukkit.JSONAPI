@@ -275,6 +275,7 @@ public class BukkitStringifier {
 			o.put("pitch", l.Location.getPitch());
 			o.put("yaw", l.Location.getYaw());
 			p.put("location", o);
+			p.put("world", l.Location.getWorld().getName());
 
 			return p;
 		} else if (obj instanceof PlayerLocation[]) {
@@ -292,6 +293,7 @@ public class BukkitStringifier {
 				o.put("pitch", l.Location.getPitch());
 				o.put("yaw", l.Location.getYaw());
 				p.put("location", o);
+				p.put("world", l.Location.getWorld().getName());
 				
 				a.add(p);
 			}

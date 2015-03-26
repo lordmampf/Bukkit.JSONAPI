@@ -724,6 +724,24 @@
             ],
             "call": "this.getPlayerLocations()",
             "name": "players.online.location"
+        },
+        {
+            "desc": "Gets spawn points of online players.",
+            "returns": [
+                "PlayerLocation[]",
+                "Spawn point of current online players."
+            ],
+            "call": "this.getOnlinePlayerSpawns()",
+            "name": "players.online.spawn"
+        },
+        {
+            "desc": "Gets spawn points of offline players.",
+            "returns": [
+                "PlayerLocation[]",
+                "Spawn point of current offline players."
+            ],
+            "call": "this.getOfflinePlayerSpawns()",
+            "name": "players.offline.spawn"
         }
     ]
 }
