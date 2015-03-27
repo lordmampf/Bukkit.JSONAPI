@@ -1082,7 +1082,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		List<PlayerLocation> names = new ArrayList<PlayerLocation>();
 
 		for (Player p : Server.getOnlinePlayers()) {
-			names.add(new PlayerLocation(p, p.getLocation()));
+			Location location = p.getLocation();
+			if (location != null) names.add(new PlayerLocation(p, location));
 		}
 
 		return names;
@@ -1092,7 +1093,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		List<PlayerLocation> names = new ArrayList<PlayerLocation>();
 
 		for (Player p : Server.getOnlinePlayers()) {
-			names.add(new PlayerLocation(p, p.getBedSpawnLocation()));
+			Location spawn = p.getBedSpawnLocation();
+			if (spawn != null) names.add(new PlayerLocation(p, spawn));
 		}
 
 		return names;
@@ -1102,7 +1104,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		List<PlayerLocation> names = new ArrayList<PlayerLocation>();
 
 		for (OfflinePlayer p : Server.getOfflinePlayers()) {
-			names.add(new PlayerLocation(p, p.getBedSpawnLocation()));
+			Location spawn = p.getBedSpawnLocation();
+			if (spawn != null) names.add(new PlayerLocation(p, spawn));
 		}
 
 		return names;
