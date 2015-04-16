@@ -2,9 +2,9 @@ JSONAPI is a plugin for Bukkit that allows you to access data and other informat
 
 ## Download
 
-[Download JSONAPI](https://github.com/d03n3rfr1tz3/jsonapi/releases)
+[Download JSONAPI](https://github.com/d03n3rfr1tz3/Bukkit.JSONAPI/releases)
 
-You can find the source code on GitHub at [d03n3rfr1tz3/jsonapi](https://github.com/d03n3rfr1tz3/jsonapi), which is forked from [alecgorge/jsonapi](https://github.com/alecgorge/jsonapi).
+You can find the source code on GitHub at [d03n3rfr1tz3/Bukkit.JSONAPI](https://github.com/d03n3rfr1tz3/Bukkit.JSONAPI), which is forked from [alecgorge/jsonapi](https://github.com/alecgorge/jsonapi).
 
 ## JSONAPI is well documented
 
