@@ -26,10 +26,10 @@ import com.alecgorge.minecraft.jsonapi.util.OfflinePlayerLoader;
 //$import org.bukkit.craftbukkit./*$mcversion$*/.entity.*;
 //$import org.bukkit.craftbukkit./*$mcversion$*/.util.*;
 //#else
-import net.minecraft.server.v1_8_R2.*;
-import org.bukkit.craftbukkit.v1_8_R2.*;
-import org.bukkit.craftbukkit.v1_8_R2.entity.*;
-import org.bukkit.craftbukkit.v1_8_R2.util.*;
+import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.craftbukkit.v1_8_R3.*;
+import org.bukkit.craftbukkit.v1_8_R3.entity.*;
+import org.bukkit.craftbukkit.v1_8_R3.util.*;
 //#endif
 
 @SuppressWarnings("deprecation")
