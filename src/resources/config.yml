@@ -31,11 +31,11 @@ options:
     # screen to a file. set to 'false' to disable
     log-to-file: 'false'
     
-	# configuration for the feature that gathers up data from
-	# streams and POSTs it to a URL every once and a while
-	# once one of the following conditions is exceeded, data is posted
-	# in the default case, data is sent every 30 seconds
-	# or every 500 items, whichever one comes first
-	stream_pusher:
-		max_queue_age: 30
-		max_queue_length: 500
+    # configuration for the feature that gathers up data from
+    # streams and POSTs it to a URL every once and a while
+    # once one of the following conditions is exceeded, data is posted
+    # in the default case, data is sent every 30 seconds
+    # or every 500 items, whichever one comes first
+    stream_pusher:
+        max_queue_age: 30
+        max_queue_length: 500
