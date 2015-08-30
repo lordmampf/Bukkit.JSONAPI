@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.BanList.Type;
@@ -20,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.block.BlockState;
@@ -48,6 +50,8 @@ import com.alecgorge.minecraft.jsonapi.util.PlayerLocation;
 import com.alecgorge.minecraft.jsonapi.util.PropertiesFile;
 import com.alecgorge.minecraft.jsonapi.util.RecursiveDirLister;
 
+import me.lordmampf.Lib.MaterialsHelper;
+
 public class APIWrapperMethods implements JSONAPIMethodProvider {
 	private Logger outLog = JSONAPI.instance.outLog;
 
@@ -68,25 +72,24 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 		return instance;
 	}
-		
+
 	public List<String> getWorldNames() {
 		List<String> names = new ArrayList<String>();
-		for(org.bukkit.World world : getServer().getWorlds()) {
+		for (org.bukkit.World world : getServer().getWorlds()) {
 			names.add(world.getName());
 		}
 		return names;
 	}
-	
+
 	public int onlinePlayerCount() {
 		Object o = Server.getOnlinePlayers();
-		
-		if(o instanceof Player[]) {
+
+		if (o instanceof Player[]) {
 			return ((Player[]) o).length;
-		}
-		else if(o instanceof Collection<?>) {
+		} else if (o instanceof Collection<?>) {
 			return ((Collection<?>) o).size();
 		}
-		
+
 		return 0;
 	}
 
@@ -113,14 +116,14 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 		return ops;
 	}
-	
+
 	public boolean setPlayerHealth(String playerName, int health) {
 		Player p = getPlayerExact(playerName);
-		p.setHealth((double)health);
+		p.setHealth((double) health);
 		p.saveData();
 		return true;
 	}
-	
+
 	public boolean setPlayerFoodLevel(String playerName, int health) {
 		Player p = getPlayerExact(playerName);
 		p.setFoodLevel(health);
@@ -299,10 +302,10 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 			Player p = getPlayerExact(playerName);
 			PlayerInventory inv = p.getInventory();
-			
+
 			ItemStack it = (new MaterialData(blockID, (byte) data)).toItemStack(quantity);
-			it.setDurability((short)data);
-			
+			it.setDurability((short) data);
+
 			if (slot == 103)
 				inv.setHelmet(it);
 			else if (slot == 102)
@@ -323,7 +326,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 	}
 
-	public boolean setPlayerInventorySlotWithDataDamageAndEnchantments(String playerName, int slot, int blockID, final int data, int damage, int quantity, Object[] enchantments) {
+	public boolean setPlayerInventorySlotWithDataDamageAndEnchantments(String playerName, int slot, int blockID, final int data, int damage, int quantity,
+			Object[] enchantments) {
 		try {
 			if (blockID == 0) {
 				return clearPlayerInventorySlot(playerName, slot);
@@ -332,7 +336,7 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 			Player p = getPlayerExact(playerName);
 			PlayerInventory inv = p.getInventory();
 			ItemStack it = (new MaterialData(blockID, (byte) data)).toItemStack(quantity);
-			it.setDurability((short)data);
+			it.setDurability((short) data);
 
 			for (int i = 0; i < enchantments.length; i++) {
 				JSONObject o = (JSONObject) enchantments[i];
@@ -390,8 +394,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 	public void setPlayerGameMode(String playerName, int gameMode) throws Exception {
 		Player p = getPlayerExact(playerName);
-		
-		p.setGameMode(GameMode.getByValue(gameMode));		
+
+		p.setGameMode(GameMode.getByValue(gameMode));
 		p.saveData();
 	}
 
@@ -448,32 +452,32 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 	}
 
 	private IRealisticChat chatUtility = null;
-		
+
 	public IRealisticChat getRealisticChatProvider() {
-		if(chatUtility != null) {
+		if (chatUtility != null) {
 			return chatUtility;
 		}
-		
+
 		chatUtility = new BukkitRealisticChat();
-		if(!chatUtility.canHandleChats()) {
+		if (!chatUtility.canHandleChats()) {
 			chatUtility = new BukkitForgeRealisticChat();
 		}
-		
-		if(chatUtility == null) {
+
+		if (chatUtility == null) {
 			chatUtility = new IRealisticChat() {
-				
+
 				@Override
 				public void pluginDisable() {
 					// TODO Auto-generated method stub
-					
+
 				}
-				
+
 				@Override
 				public boolean chatWithName(String message, String name) {
 					// TODO Auto-generated method stub
 					return false;
 				}
-				
+
 				@Override
 				public boolean canHandleChats() {
 					// TODO Auto-generated method stub
@@ -481,15 +485,15 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 				}
 			};
 		}
-		
+
 		return chatUtility;
 	}
-	
+
 	public boolean chatWithName(String message, String name) {
 		getRealisticChatProvider().chatWithName(message, name);
 		return true;
 	}
-	
+
 	public void pluginDisable() {
 		getRealisticChatProvider().pluginDisable();
 	}
@@ -560,9 +564,9 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 	public boolean giveItem(String name, int id, int quant, int data) throws Exception {
 		try {
-            byte realData = Byte.valueOf(String.valueOf(data));
+			byte realData = Byte.valueOf(String.valueOf(data));
 			Player p = getPlayerExact(name);
-            MaterialData materialData = new MaterialData(id, realData);
+			MaterialData materialData = new MaterialData(id, realData);
 			p.getInventory().addItem(materialData.toItemStack(quant));
 			p.saveData();
 			return true;
@@ -651,18 +655,18 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 			throw new FileNotFoundException(fileName + ".properties was not found");
 		}
 	}
-	
+
 	public String createFile(String path) throws IOException {
 		File f = new File(path);
-		if(!f.exists()) {
+		if (!f.exists()) {
 			f.createNewFile();
 		}
 		return path;
 	}
-	
+
 	public String createFolder(String path) throws IOException {
 		File f = new File(path);
-		if(!f.exists()) {
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		return path;
@@ -695,10 +699,9 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		File f;
 		if ((f = new File(fileName)).exists()) {
 			try {
-				if(f.isDirectory()) {
+				if (f.isDirectory()) {
 					return deleteDirectory(f);
-				}
-				else {
+				} else {
 					return f.delete();
 				}
 			} catch (Exception e) {
@@ -709,23 +712,22 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 			return false;
 		}
 	}
-	
+
 	private boolean deleteDirectory(File directory) {
-		if (directory.exists()){
+		if (directory.exists()) {
 			File[] files = directory.listFiles();
-			
-			if (files != null){
-				for (int i=0; i<files.length; i++) {
+
+			if (files != null) {
+				for (int i = 0; i < files.length; i++) {
 					if (files[i].isDirectory()) {
 						deleteDirectory(files[i]);
-					}
-					else {
+					} else {
 						files[i].delete();
 					}
 				}
 			}
 		}
-		
+
 		return directory.delete();
 	}
 
@@ -843,7 +845,7 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 			f.createNewFile();
 
 			stream = new FileOutputStream(f);
-			
+
 			JSONAPI.dbug("output stream created");
 			stream.write(contents.getBytes(Charset.forName("UTF-8")));
 			JSONAPI.dbug("output stream written");
@@ -936,11 +938,10 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 	public double getDiskFreeSpace() {
 		return (new File(".")).getFreeSpace() / 1024.0 / 1024.0;
 	}
-	
+
 	public JSONObject testClock() {
 		return JSONAPI.instance.getTickRateCounter().getJSONObject();
 	}
-
 
 	public List<JSONObject> getStreamWithLimit(String streamName, int count) {
 		List<JSONAPIStreamMessage> stack = JSONAPI.instance.getStreamManager().getStream(streamName).getStack();
@@ -1083,7 +1084,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 		for (Player p : Server.getOnlinePlayers()) {
 			Location location = p.getLocation();
-			if (location != null) names.add(new PlayerLocation(p, location));
+			if (location != null)
+				names.add(new PlayerLocation(p, location));
 		}
 
 		return names;
@@ -1094,7 +1096,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 		for (Player p : Server.getOnlinePlayers()) {
 			Location spawn = p.getBedSpawnLocation();
-			if (spawn != null) names.add(new PlayerLocation(p, spawn));
+			if (spawn != null)
+				names.add(new PlayerLocation(p, spawn));
 		}
 
 		return names;
@@ -1105,7 +1108,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 		for (OfflinePlayer p : Server.getOfflinePlayers()) {
 			Location spawn = p.getBedSpawnLocation();
-			if (spawn != null) names.add(new PlayerLocation(p, spawn));
+			if (spawn != null)
+				names.add(new PlayerLocation(p, spawn));
 		}
 
 		return names;
@@ -1221,13 +1225,13 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 				((Sign) d).setLine(i, lines[i]);
 			}
 			((Sign) d).update();
-			
+
 			return true;
 		}
 
 		return false;
 	}
-	
+
 	public boolean setSignText(String world, int x, int y, int z, List<String> lines) {
 		String[] a = new String[lines.size()];
 		lines.toArray(a);
@@ -1299,8 +1303,61 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 			return false;
 		}
 	}
-	
+
 	public boolean spawn(String world, double x, double y, double z, String mobName) {
 		return getServer().getWorld(world).spawnEntity(new Location(getServer().getWorld(world), x, y, z), EntityType.fromName(mobName)) != null;
-	}	
+	}
+
+	public JSONObject getOfflinePlayerInventory(String playerUuid) {
+		try {
+			JSONObject ret = new JSONObject();
+
+			//	HashMap<String, List<ItemStackData>> ret = new HashMap<String, List<ItemStackData>>();
+			OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(playerUuid));
+
+			Player player = null;
+
+			if (p.isOnline()) {
+				player = p.getPlayer();
+			} else {
+				player = OfflinePlayerLoader.loadFromOfflinePlayer(p);
+			}
+
+			List<List<Object>> inventory = new ArrayList<List<Object>>();
+			for (ItemStack is : player.getInventory().getContents()) {
+				inventory.add(getInventoryItemMampfname(is));
+			}
+			ret.put("inventory", inventory);
+
+			List<List<Object>> inventory2 = new ArrayList<List<Object>>();
+			for (ItemStack is : player.getInventory().getArmorContents()) {
+				inventory2.add(getInventoryItemMampfname(is));
+			}
+			ret.put("armor", inventory2);
+
+			List<List<Object>> inventory3 = new ArrayList<List<Object>>();
+			for (ItemStack is : player.getEnderChest().getContents()) {
+				inventory3.add(getInventoryItemMampfname(is));
+			}
+			ret.put("enderchest", inventory3);
+
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private List<Object> getInventoryItemMampfname(ItemStack pItemStack) {
+		List<Object> ret = new ArrayList<Object>();
+		if (pItemStack == null || pItemStack.getType().equals(Material.AIR)) {
+			ret.add("null");
+			ret.add(0);
+			return ret;
+		}
+		ret.add(MaterialsHelper.getMaterialName(pItemStack));
+		ret.add(pItemStack.getAmount());
+		return ret;
+	}
+
 }

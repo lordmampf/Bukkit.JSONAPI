@@ -74,7 +74,7 @@
     </plugins>
   </build>
   <dependencies>
-    <dependency>
+ <!--     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot</artifactId>
       <version>latest</version>
@@ -88,11 +88,11 @@
       <groupId>com.mojang</groupId>
       <artifactId>authlib</artifactId>
       <version>1.5.13</version>
-    </dependency>
+    </dependency> 
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
       <version>3.6.3-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
+    </dependency> -->
+  </dependencies> 
 </project>

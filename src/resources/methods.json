@@ -888,6 +888,15 @@
 			"args": [
 				["String", "The player's name."]
 			]
+		},
+		{
+			"name": "getOfflinePlayerInventory",
+			"desc": "Gets an offlinePlayer inventory object representing the specified person.",
+			"returns": ["Object", "A offlinePlayer object respresenting the specified person."],
+			"call": "this.getOfflinePlayerInventory(0)",
+			"args": [
+				["String","Player uuid"]
+			]
 		}
 	]
 }

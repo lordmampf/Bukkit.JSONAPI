@@ -75,7 +75,7 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 	public JSONWebSocketServer jsonWebSocketServer;
 	public JSONWebSocketServer sslJsonWebSocketServer;
 	public JSONAPIMessageListener jsonMessageListener = new JSONAPIMessageListener(this);
-
+	
 	private StreamManager streamManager = new StreamManager();
 
 	public boolean logging = false;
