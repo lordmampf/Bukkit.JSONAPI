@@ -18,18 +18,19 @@ import org.bukkit.craftbukkit.v1_8_R3.*;
 //#endif
 
 public class OfflinePlayerLoader {
-	public static Player load(String exactPlayerName) {
+	public static Player load(UUID pUUID) {
 		// big thanks to
 		// https://github.com/lishid/OpenInv/blob/master/src/main/java/com/lishid/openinv/internal/v1_8_R1/PlayerDataManager.java
 		// Offline inv here...
 
 		try {
-			UUID uuid = matchUser(exactPlayerName);
+		/*	UUID uuid = matchUser(exactPlayerName);
 			if (uuid == null) {
 				return null;
-			}
+			}*/
+			
 
-			OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+			OfflinePlayer player = Bukkit.getOfflinePlayer(pUUID);
 			return loadFromOfflinePlayer(player);
 		}
 		catch (Exception e) {

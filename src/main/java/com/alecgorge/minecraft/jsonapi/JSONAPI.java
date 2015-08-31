@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -785,8 +786,8 @@ public class JSONAPI extends JavaPlugin implements JSONAPIMethodProvider {
 		}
 	}
 
-	public static Player loadOfflinePlayer(String exactPlayerName) {
-		return OfflinePlayerLoader.load(exactPlayerName);
+	public static Player loadOfflinePlayer(UUID pUUID) {
+		return OfflinePlayerLoader.load(pUUID);
 	}
 
 	private void initialiseListeners() {

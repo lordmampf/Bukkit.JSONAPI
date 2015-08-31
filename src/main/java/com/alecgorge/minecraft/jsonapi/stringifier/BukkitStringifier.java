@@ -134,7 +134,7 @@ public class BukkitStringifier {
 			OfflinePlayer op = (OfflinePlayer) obj;
 			JSONObject o = new JSONObject();
 
-			Player target = JSONAPI.loadOfflinePlayer(op.getName());
+			Player target = JSONAPI.loadOfflinePlayer(op.getUniqueId());
 			if (target != null)
 				return target;
 

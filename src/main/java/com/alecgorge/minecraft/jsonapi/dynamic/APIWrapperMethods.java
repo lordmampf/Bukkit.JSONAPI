@@ -51,6 +51,7 @@ import com.alecgorge.minecraft.jsonapi.util.PropertiesFile;
 import com.alecgorge.minecraft.jsonapi.util.RecursiveDirLister;
 
 import me.lordmampf.Lib.MaterialsHelper;
+import me.lordmampf.Lib.Inventory.InventoryHelper;
 
 public class APIWrapperMethods implements JSONAPIMethodProvider {
 	private Logger outLog = JSONAPI.instance.outLog;
@@ -93,12 +94,11 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		return 0;
 	}
 
-	public HashMap<Integer, ItemStack> removePlayerInventoryItem(String playerName, int itemID) {
+	public HashMap<Integer, ItemStack> removePlayerInventoryItem(String uuid, int itemID) {
 		try {
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			HashMap<Integer, ItemStack> c = p.getInventory().removeItem(new ItemStack(itemID, 64 * 64));
 			p.saveData();
-
 			return c;
 		} catch (NullPointerException e) {
 			return null;
@@ -107,33 +107,31 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 	public List<OfflinePlayer> opList() {
 		List<OfflinePlayer> ops = new ArrayList<OfflinePlayer>();
-
 		for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
 			if (p.isOp()) {
 				ops.add(p);
 			}
 		}
-
 		return ops;
 	}
 
-	public boolean setPlayerHealth(String playerName, int health) {
-		Player p = getPlayerExact(playerName);
+	public boolean setPlayerHealth(String uuid, int health) {
+		Player p = getPlayerExact(UUID.fromString(uuid));
 		p.setHealth((double) health);
 		p.saveData();
 		return true;
 	}
 
-	public boolean setPlayerFoodLevel(String playerName, int health) {
-		Player p = getPlayerExact(playerName);
+	public boolean setPlayerFoodLevel(String uuid, int health) {
+		Player p = getPlayerExact(UUID.fromString(uuid));
 		p.setFoodLevel(health);
 		p.saveData();
 		return true;
 	}
 
-	public boolean removeEnchantmentsFromPlayerInventorySlot(String playerName, int slot, List<Object> enchantments) {
+	public boolean removeEnchantmentsFromPlayerInventorySlot(String uuid, int slot, List<Object> enchantments) {
 		try {
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 			ItemStack it;
 
@@ -160,9 +158,9 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean addEnchantmentToPlayerInventorySlot(String playerName, int slot, int enchantmentID, int level) {
+	public boolean addEnchantmentToPlayerInventorySlot(String uuid, int slot, int enchantmentID, int level) {
 		try {
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 			ItemStack it;
 
@@ -187,9 +185,9 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean addEnchantmentsToPlayerInventorySlot(String playerName, int slot, List<Object> enchantments) {
+	public boolean addEnchantmentsToPlayerInventorySlot(String uuid, int slot, List<Object> enchantments) {
 		try {
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 			ItemStack it;
 
@@ -217,31 +215,31 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public PlayerLocation getPlayerLocation(String playerName) {
+	public PlayerLocation getPlayerLocation(String uuid) {
 		try {
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			return new PlayerLocation(p, p.getLocation());
 		} catch (NullPointerException e) {
 			return null;
 		}
 	}
 
-	public PlayerInventory getPlayerInventory(String playerName) {
+	public PlayerInventory getPlayerInventory(String uuid) {
 		try {
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			return p.getInventory();
 		} catch (NullPointerException e) {
 			return null;
 		}
 	}
 
-	public boolean setPlayerInventorySlot(String playerName, int slot, int blockID, int quantity) {
+	public boolean setPlayerInventorySlot(String uuid, int slot, int blockID, int quantity) {
 		try {
 			if (blockID == 0) {
-				return clearPlayerInventorySlot(playerName, slot);
+				return clearPlayerInventorySlot(uuid, slot);
 			}
 
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 			ItemStack it = new ItemStack(blockID, quantity);
 
@@ -264,13 +262,13 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean setPlayerInventorySlotWithData(String playerName, int slot, int blockID, final int data, int quantity) {
+	public boolean setPlayerInventorySlotWithData(String uuid, int slot, int blockID, final int data, int quantity) {
 		try {
 			if (blockID == 0) {
-				return clearPlayerInventorySlot(playerName, slot);
+				return clearPlayerInventorySlot(uuid, slot);
 			}
 
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 			ItemStack it = (new MaterialData(blockID, (byte) data)).toItemStack(quantity);
 
@@ -294,13 +292,13 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 	}
 
-	public boolean setPlayerInventorySlotWithDataAndDamage(String playerName, int slot, int blockID, final int data, int damage, int quantity) {
+	public boolean setPlayerInventorySlotWithDataAndDamage(String uuid, int slot, int blockID, final int data, int damage, int quantity) {
 		try {
 			if (blockID == 0) {
-				return clearPlayerInventorySlot(playerName, slot);
+				return clearPlayerInventorySlot(uuid, slot);
 			}
 
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 
 			ItemStack it = (new MaterialData(blockID, (byte) data)).toItemStack(quantity);
@@ -326,14 +324,14 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 	}
 
-	public boolean setPlayerInventorySlotWithDataDamageAndEnchantments(String playerName, int slot, int blockID, final int data, int damage, int quantity,
+	public boolean setPlayerInventorySlotWithDataDamageAndEnchantments(String uuid, int slot, int blockID, final int data, int damage, int quantity,
 			Object[] enchantments) {
 		try {
 			if (blockID == 0) {
-				return clearPlayerInventorySlot(playerName, slot);
+				return clearPlayerInventorySlot(uuid, slot);
 			}
 
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 			ItemStack it = (new MaterialData(blockID, (byte) data)).toItemStack(quantity);
 			it.setDurability((short) data);
@@ -363,13 +361,13 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 	}
 
-	public boolean setPlayerInventorySlot(String playerName, int slot, int blockID, int damage, int quantity) {
+	public boolean setPlayerInventorySlot(String uuid, int slot, int blockID, int damage, int quantity) {
 		try {
 			if (blockID == 0) {
-				return clearPlayerInventorySlot(playerName, slot);
+				return clearPlayerInventorySlot(uuid, slot);
 			}
 
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 			ItemStack it = new ItemStack(blockID, quantity, Short.valueOf(String.valueOf(damage)).shortValue());
 
@@ -392,16 +390,16 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public void setPlayerGameMode(String playerName, int gameMode) throws Exception {
-		Player p = getPlayerExact(playerName);
+	public void setPlayerGameMode(String uuid, int gameMode) throws Exception {
+		Player p = getPlayerExact(UUID.fromString(uuid));
 
 		p.setGameMode(GameMode.getByValue(gameMode));
 		p.saveData();
 	}
 
-	public boolean clearPlayerInventorySlot(String playerName, int slot) {
+	public boolean clearPlayerInventorySlot(String uuid, int slot) {
 		try {
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			PlayerInventory inv = p.getInventory();
 			int cnt = inv.getSize();
 
@@ -424,9 +422,9 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean updatePlayerInventorySlot(String playerName, int slot, int newAmount) {
+	public boolean updatePlayerInventorySlot(String uuid, int slot, int newAmount) {
 		try {
-			Player p = getPlayerExact(playerName);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			ItemStack s = p.getInventory().getItem(slot);
 			s.setAmount(newAmount);
 			p.getInventory().setItem(slot, s);
@@ -489,8 +487,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		return chatUtility;
 	}
 
-	public boolean chatWithName(String message, String name) {
-		getRealisticChatProvider().chatWithName(message, name);
+	public boolean chatWithName(String message, String uuid) {
+		getRealisticChatProvider().chatWithName(message, uuid);
 		return true;
 	}
 
@@ -551,33 +549,36 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean giveItem(String name, int id, int quant) {
+	public boolean giveItem(String uuid, String mampfname, int quant) {
 		try {
-			Player p = getPlayerExact(name);
-			p.getInventory().addItem(new ItemStack(id, quant));
+			Player p = getPlayerExact(UUID.fromString(uuid));
+			ItemStack itemstack = MaterialsHelper.getMaterial(mampfname);
+			itemstack.setAmount(quant);
+			p.getInventory().addItem(itemstack);
 			p.saveData();
 			return true;
 		} catch (NullPointerException e) {
 			return false;
 		}
 	}
+	/*
+	 * public boolean giveItem(String uuid, String mampfname, int quant, int data) throws Exception {
+	 * try {
+	 * byte realData = Byte.valueOf(String.valueOf(data));
+	 * Player p = getPlayerExact(UUID.fromString(uuid));
+	 * MaterialData materialData = new MaterialData(id, realData);
+	 * p.getInventory().addItem(materialData.toItemStack(quant));
+	 * p.saveData();
+	 * return true;
+	 * } catch (NullPointerException e) {
+	 * return false;
+	 * }
+	 * }
+	 */
 
-	public boolean giveItem(String name, int id, int quant, int data) throws Exception {
+	public boolean giveItemDrop(String uuid, int id, int quant) {
 		try {
-			byte realData = Byte.valueOf(String.valueOf(data));
-			Player p = getPlayerExact(name);
-			MaterialData materialData = new MaterialData(id, realData);
-			p.getInventory().addItem(materialData.toItemStack(quant));
-			p.saveData();
-			return true;
-		} catch (NullPointerException e) {
-			return false;
-		}
-	}
-
-	public boolean giveItemDrop(String name, int id, int quant) {
-		try {
-			Player p = getPlayerExact(name);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			p.getWorld().dropItem(p.getLocation(), new ItemStack(id, quant));
 			return true;
 		} catch (NullPointerException e) {
@@ -585,9 +586,9 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean giveItemDrop(String name, int id, int quant, int data) throws Exception {
+	public boolean giveItemDrop(String uuid, int id, int quant, int data) throws Exception {
 		try {
-			Player p = getPlayerExact(name);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			ItemStack stack = new ItemStack(id, quant);
 			stack.setData(new MaterialData(id, Byte.valueOf(String.valueOf(data)).byteValue()));
 			p.getWorld().dropItem(p.getLocation(), stack);
@@ -905,15 +906,15 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean setPlayerLevel(String player, int level) {
-		Player p = getPlayerExact(player);
+	public boolean setPlayerLevel(String uuid, int level) {
+		Player p = getPlayerExact(UUID.fromString(uuid));
 		p.setLevel(level);
 		p.saveData();
 		return true;
 	}
 
-	public boolean setPlayerExperience(String player, float level) {
-		Player p = getPlayerExact(player);
+	public boolean setPlayerExperience(String uuid, float level) {
+		Player p = getPlayerExact(UUID.fromString(uuid));
 		p.setExp(level);
 		p.saveData();
 		return true;
@@ -1019,8 +1020,8 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 	}
 
 	public boolean teleport(String player1, String player2) {
-		Player p = getPlayerExact(player1);
-		p.teleport(getPlayerExact(player2));
+		Player p = getPlayerExact(UUID.fromString(player1));
+		p.teleport(getPlayerExact(UUID.fromString(player2)));
 		p.saveData();
 
 		return true;
@@ -1128,27 +1129,27 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean whitelist(String playerName) {
+	public boolean whitelist(String uuid) {
 		try {
-			Bukkit.getOfflinePlayer(OfflinePlayerLoader.matchUser(playerName)).setWhitelisted(true);
+			Bukkit.getOfflinePlayer(UUID.fromString(uuid)).setWhitelisted(true);
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-	public boolean unwhitelist(String playerName) {
+	public boolean unwhitelist(String uuid) {
 		try {
-			Bukkit.getOfflinePlayer(OfflinePlayerLoader.matchUser(playerName)).setWhitelisted(false);
+			Bukkit.getOfflinePlayer(UUID.fromString(uuid)).setWhitelisted(false);
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 
-	public boolean op(String playerName) {
+	public boolean op(String uuid) {
 		try {
-			OfflinePlayer p = Bukkit.getOfflinePlayer(OfflinePlayerLoader.matchUser(playerName));
+			OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
 
 			if (p.isOnline()) {
 				p.getPlayer().sendMessage("You are now OP");
@@ -1161,9 +1162,9 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean deop(String playerName) {
+	public boolean deop(String uuid) {
 		try {
-			OfflinePlayer p = Bukkit.getOfflinePlayer(OfflinePlayerLoader.matchUser(playerName));
+			OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
 
 			if (p.isOnline()) {
 				p.getPlayer().sendMessage("You are no longer OP");
@@ -1176,18 +1177,18 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public Player getPlayerExact(String playerName) {
-		Player player = Server.getPlayerExact(playerName);
+	public Player getPlayerExact(UUID pUUID) {
+		Player player = Server.getPlayer(pUUID);
 		if (player == null) {
-			player = JSONAPI.loadOfflinePlayer(playerName);
+			player = JSONAPI.loadOfflinePlayer(pUUID);
 		}
 
 		return player;
 	}
 
-	public boolean teleport(String playername, int x, int y, int z) {
+	public boolean teleport(String uuid, int x, int y, int z) {
 		try {
-			Player player = getPlayerExact(playername);
+			Player player = getPlayerExact(UUID.fromString(uuid));
 			player.teleport(new Location(player.getWorld(), x, y, z));
 			player.saveData();
 			return true;
@@ -1196,9 +1197,9 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	public boolean teleport(String playername, String world, int x, int y, int z) {
+	public boolean teleport(String uuid, String world, int x, int y, int z) {
 		try {
-			Player p = getPlayerExact(playername);
+			Player p = getPlayerExact(UUID.fromString(uuid));
 			p.teleport(new Location(Server.getWorld(world), x, y, z));
 			p.saveData();
 			return true;
@@ -1325,19 +1326,19 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 
 			List<List<Object>> inventory = new ArrayList<List<Object>>();
 			for (ItemStack is : player.getInventory().getContents()) {
-				inventory.add(getInventoryItemMampfname(is));
+				inventory.add(getInventoryItemMampfnameAndCount(is));
 			}
 			ret.put("inventory", inventory);
 
 			List<List<Object>> inventory2 = new ArrayList<List<Object>>();
 			for (ItemStack is : player.getInventory().getArmorContents()) {
-				inventory2.add(getInventoryItemMampfname(is));
+				inventory2.add(getInventoryItemMampfnameAndCount(is));
 			}
 			ret.put("armor", inventory2);
 
 			List<List<Object>> inventory3 = new ArrayList<List<Object>>();
 			for (ItemStack is : player.getEnderChest().getContents()) {
-				inventory3.add(getInventoryItemMampfname(is));
+				inventory3.add(getInventoryItemMampfnameAndCount(is));
 			}
 			ret.put("enderchest", inventory3);
 
@@ -1348,7 +1349,7 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		}
 	}
 
-	private List<Object> getInventoryItemMampfname(ItemStack pItemStack) {
+	private List<Object> getInventoryItemMampfnameAndCount(ItemStack pItemStack) {
 		List<Object> ret = new ArrayList<Object>();
 		if (pItemStack == null || pItemStack.getType().equals(Material.AIR)) {
 			ret.add("null");
@@ -1360,4 +1361,19 @@ public class APIWrapperMethods implements JSONAPIMethodProvider {
 		return ret;
 	}
 
+	public int getPlayerInventoryEmptySlots(String uuid) {
+		try {
+			OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(uuid));
+			Player player = null;
+			if (p.isOnline()) {
+				player = p.getPlayer();
+			} else {
+				player = OfflinePlayerLoader.loadFromOfflinePlayer(p);
+			}
+			return InventoryHelper.getFreeSlots(player.getInventory());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 }

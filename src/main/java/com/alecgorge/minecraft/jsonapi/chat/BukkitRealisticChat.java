@@ -13,13 +13,6 @@ import org.bukkit.event.player.PlayerChatEvent;
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
 import com.alecgorge.minecraft.jsonapi.util.OfflinePlayerLoader;
 
-
-
-
-
-
-
-
 //#ifdefined mcversion
 //$import net.minecraft.server./*$mcversion$*/.*;
 //$import org.bukkit.craftbukkit./*$mcversion$*/.*;
@@ -34,79 +27,80 @@ import org.bukkit.craftbukkit.v1_8_R3.util.*;
 
 @SuppressWarnings("deprecation")
 public class BukkitRealisticChat implements IRealisticChat {
-	private Server	Server	= JSONAPI.instance.getServer();
+	private Server Server = JSONAPI.instance.getServer();
 
 	public Server getServer() {
 		return Server;
 	}
-	
+
 	public class FauxPlayer extends CraftPlayer {
 		String name = null;
 		UUID fakeUUID = null;
-		
+
 		public FauxPlayer(String fakeName, UUID fakeUUID, CraftPlayer player) {
-			super((CraftServer)player.getServer(), player.getHandle());
+			super((CraftServer) player.getServer(), player.getHandle());
 			name = fakeName;
 			this.fakeUUID = fakeUUID;
 		}
-		
+
 		@Override
 		public String getName() {
-			if(name == null) {
+			if (name == null) {
 				return super.getName();
 			}
 			return name;
 		}
-		
+
 		@Override
 		public String getDisplayName() {
-			if(name == null) {
+			if (name == null) {
 				return super.getDisplayName();
 			}
 			return name;
 		}
-		
+
 		@Override
 		public UUID getUniqueId() {
-			if(fakeUUID == null) {
+			if (fakeUUID == null) {
 				return super.getUniqueId();
 			}
 			return super.getUniqueId();
 		}
 	}
-	
-	public boolean chatWithNameForPlayer(String message, String name, String playerToExtend) {
-		Player player = getServer().getPlayerExact(name);
-		
+
+	public boolean chatWithNameForPlayer(String message, String uuid, String playerToExtend) {
+		Player player = getServer().getPlayer(UUID.fromString(uuid));
+
 		// player isn't online
 		if (player == null) {
-			player = JSONAPI.loadOfflinePlayer(name);
+			player = JSONAPI.loadOfflinePlayer(UUID.fromString(uuid));
 		}
-		
+
 		// player doesn't exist. better fake something.
 		if (player == null) {
-			Player pe = null;			
+			Player pe = null;
 			FauxPlayer f = null;
-			if(getServer().getOfflinePlayers().length > 0) {
-				pe = OfflinePlayerLoader.loadFromOfflinePlayer(getServer().getOfflinePlayers()[0]);					
+			if (getServer().getOfflinePlayers().length > 0) {
+				pe = OfflinePlayerLoader.loadFromOfflinePlayer(getServer().getOfflinePlayers()[0]);
+			} else if (getServer().getOnlinePlayers().size() > 0) {
+				pe = getServer().getOnlinePlayers().iterator().next();
 			}
-			else if(getServer().getOnlinePlayers().size() > 0) {
-				pe = getServer().getOnlinePlayers().iterator().next();					
+			String name = "playername";
+
+			if (pe != null)
+				name = pe.getName();
+			if (playerToExtend == null) {
+				f = new FauxPlayer(name, UUID.randomUUID(), (CraftPlayer) pe);
+			} else {
+				f = new FauxPlayer(name, UUID.randomUUID(), (CraftPlayer) pe);
 			}
 
-			if(playerToExtend == null) {
-				f = new FauxPlayer(name, UUID.randomUUID(), (CraftPlayer)pe);
-			}
-			else {
-				f = new FauxPlayer(name, UUID.randomUUID(), (CraftPlayer)pe);
-			}
-			
 			return chatWithPlayer(message, f);
 		}
 
 		return chatWithPlayer(message, player);
 	}
-	
+
 	public boolean chatWithName(String message, String name) {
 		return chatWithNameForPlayer(message, name, null);
 	}
@@ -135,8 +129,7 @@ public class BukkitRealisticChat implements IRealisticChat {
 
 			if (getServer() instanceof CraftServer) {
 				minecraftServer = ((CraftServer) getServer()).getServer();
-			}
-			else {
+			} else {
 				System.err.println("Whoa, getServer() isn't a CraftServer?! I can't send a chat message now! It is a " + getServer().getClass().getCanonicalName());
 				return false;
 			}
@@ -153,7 +146,7 @@ public class BukkitRealisticChat implements IRealisticChat {
 							return null;
 						}
 
-						String message = String.format(queueEvent.getFormat(), new Object[] { queueEvent.getPlayer().getDisplayName(),queueEvent.getMessage() });
+						String message = String.format(queueEvent.getFormat(), new Object[] { queueEvent.getPlayer().getDisplayName(), queueEvent.getMessage() });
 
 						minecraftServer.console.sendMessage(message);
 
@@ -161,8 +154,7 @@ public class BukkitRealisticChat implements IRealisticChat {
 							for (EntityPlayer player : (List<EntityPlayer>) minecraftServer.getPlayerList().players) {
 								player.sendMessage(CraftChatMessage.fromString(message));
 							}
-						}
-						else {
+						} else {
 							for (Player player : queueEvent.getRecipients()) {
 								player.sendMessage(message);
 							}
@@ -177,28 +169,24 @@ public class BukkitRealisticChat implements IRealisticChat {
 					waitable.run();
 				try {
 					waitable.get();
-				}
-				catch (InterruptedException localInterruptedException) {
+				} catch (InterruptedException localInterruptedException) {
 					Thread.currentThread().interrupt();
-				}
-				catch (ExecutionException e) {
+				} catch (ExecutionException e) {
 					throw new RuntimeException("Exception processing chat event", e.getCause());
 				}
-			}
-			else {
+			} else {
 				if (event.isCancelled()) {
 					JSONAPI.dbug("Chat event cancelled");
 					return false;
 				}
 
-				s = String.format(event.getFormat(), new Object[] { event.getPlayer().getDisplayName(),event.getMessage() });
+				s = String.format(event.getFormat(), new Object[] { event.getPlayer().getDisplayName(), event.getMessage() });
 				minecraftServer.console.sendMessage(s);
 				if (((LazyPlayerSet) event.getRecipients()).isLazy()) {
 					for (EntityPlayer recipient : (List<EntityPlayer>) minecraftServer.getPlayerList().players) {
 						recipient.sendMessage(CraftChatMessage.fromString(s));
 					}
-				}
-				else {
+				} else {
 					for (Player p : event.getRecipients()) {
 						p.sendMessage(message);
 					}
@@ -206,10 +194,9 @@ public class BukkitRealisticChat implements IRealisticChat {
 			}
 
 			return true;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
-		}		
+		}
 	}
 }

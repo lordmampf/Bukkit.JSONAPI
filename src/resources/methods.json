@@ -41,7 +41,7 @@
 			"returns": ["Player", "A player object respresenting the specified person."],
 			"call": "this.getPlayerExact(0)",
 			"args": [
-				["String","Player name"]
+				["String","Player uuid"]
 			]
 		},
 		{
@@ -50,30 +50,27 @@
 			"returns": ["OfflinePlayer", "A offlinePlayer object respresenting the specified person."],
 			"call": "Server.getOfflinePlayer(0)",
 			"args": [
-				["String","Player name"]
+				["String","Player uuid"]
 			]
 		},
 		{
 			"name": "givePlayerItem",
-			"desc": "Gives the specified player the specified quanity of the item id by placing it in the first empty slot.",
+			"desc": "Gives the specified player the specified quanity of the item by placing it in the first empty slot.",
 			"call": "this.giveItem(0, 1, 2)",
 			"returns": ["boolean", "True if the item was given. False will be returned if the player is not on the server."],
 			"args": [
 				["String","Player's name"],
-				["int","Id of item to give"],
+				["String","Mampfname of item to give"],
 				["int","Quantity of item to give"]
 			]
 		},
 		{
-			"name": "givePlayerItemWithData",
-			"desc": "Gives the specified player the specified quanity of the item id with the specified data by placing it in the first empty slot.",
-			"call": "this.giveItem(0, 1, 2, 3)",
-			"returns": ["boolean", "True if the item was given. False will be returned if the player is not on the server. An exception could be throw for invalid data (data < 0 or data > 15)."],
+			"name": "getPlayerInventoryEmptySlots",
+			"desc": "getPlayerInventoryEmptySlots",
+			"call": "this.getPlayerInventoryEmptySlots(0)",
+			"returns": ["int", "EmptySlots"],
 			"args": [
-				["String","Player's name"],
-				["int","Id of item to give"],
-				["int","Quantity of item to give"],
-				["int","Decimal representation of the data value."]
+				["String", "Player's uuid"],
 			]
 		},
 		{
@@ -852,7 +849,7 @@
 			"call":"this.teleport(0,1,2,3)",
 			"returns":["boolean", "True if successful, false otherwise."],
 			"args": [
-				["String", "The player name."],
+				["String", "The Player uuid."],
 				["int", "The x-coord of the block."],
 				["int", "The y-coord of the block."],
 				["int", "The z-coord of the block."]
@@ -864,7 +861,7 @@
 			"call":"this.teleport(0,1,2,3,4)",
 			"returns":["boolean", "True if successful, false otherwise."],
 			"args": [
-				["String", "The player name."],
+				["String", "The Player uuid."],
 				["String", "The world name."],
 				["int", "The x-coord of the block."],
 				["int", "The y-coord of the block."],
