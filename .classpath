@@ -25,6 +25,6 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/MampfLib"/>
 	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/PSG/PSG-Peter/EklipseLibs/spigot-1.8.7.jar"/>
-	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/PSG/PSG-Peter/EklipseLibs/ProtocolLib-3.6.3-SNAPSHOT-117.jar"/>
+	<classpathentry kind="lib" path="D:/Dropbox/Dropbox/PSG/PSG-Peter/EklipseLibs/ProtocolLib-3.6.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
