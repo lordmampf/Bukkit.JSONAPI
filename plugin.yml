@@ -4,8 +4,7 @@ version: 1.0.0
 description: Control your server and fetch information from your server.
 website: http://mcjsonapi.com/
 author: Dirk Sarodnick
-depend: [ProtocolLib]
-softdepend: []
+softdepend: [ProtocolLib]
 commands:
   jsonapi-list:
     description: Lists all the methods and namespaces currently loaded for JSONAPI
