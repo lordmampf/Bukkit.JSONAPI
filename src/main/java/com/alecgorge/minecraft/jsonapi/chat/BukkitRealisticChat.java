@@ -6,6 +6,11 @@ import java.util.concurrent.ExecutionException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R1.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_9_R1.util.LazyPlayerSet;
+import org.bukkit.craftbukkit.v1_9_R1.util.Waitable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -13,17 +18,8 @@ import org.bukkit.event.player.PlayerChatEvent;
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
 import com.alecgorge.minecraft.jsonapi.util.OfflinePlayerLoader;
 
-//#ifdefined mcversion
-//$import net.minecraft.server./*$mcversion$*/.*;
-//$import org.bukkit.craftbukkit./*$mcversion$*/.*;
-//$import org.bukkit.craftbukkit./*$mcversion$*/.entity.*;
-//$import org.bukkit.craftbukkit./*$mcversion$*/.util.*;
-//#else
-import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.craftbukkit.v1_8_R3.*;
-import org.bukkit.craftbukkit.v1_8_R3.entity.*;
-import org.bukkit.craftbukkit.v1_8_R3.util.*;
-//#endif
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
 
 @SuppressWarnings("deprecation")
 public class BukkitRealisticChat implements IRealisticChat {
@@ -120,11 +116,6 @@ public class BukkitRealisticChat implements IRealisticChat {
 			String s = message;
 			boolean async = false;
 
-			// based on
-			// net/minecraft/server/v1_8_R1/PlayerConnection.java#chat(2)
-			AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, player, s, new LazyPlayerSet());
-			getServer().getPluginManager().callEvent(event);
-
 			final MinecraftServer minecraftServer;
 
 			if (getServer() instanceof CraftServer) {
@@ -133,6 +124,11 @@ public class BukkitRealisticChat implements IRealisticChat {
 				System.err.println("Whoa, getServer() isn't a CraftServer?! I can't send a chat message now! It is a " + getServer().getClass().getCanonicalName());
 				return false;
 			}
+
+			// based on
+			// net/minecraft/server/v1_8_R1/PlayerConnection.java#chat(2)
+			AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, player, s, new LazyPlayerSet(minecraftServer));
+			getServer().getPluginManager().callEvent(event);
 
 			Waitable<Void> waitable;
 			if (PlayerChatEvent.getHandlerList().getRegisteredListeners().length != 0) {

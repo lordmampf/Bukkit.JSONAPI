@@ -8,14 +8,12 @@ import org.bukkit.entity.Player;
 
 import com.mojang.authlib.GameProfile;
 
-//#ifdefined mcversion
-//$import net.minecraft.server./*$mcversion$*/.*;
-//$import org.bukkit.craftbukkit./*$mcversion$*/.*;
-//#else
-import net.minecraft.server.v1_8_R3.*;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.*;
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R1.PlayerInteractManager;
+
 //#endif
+import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
 
 public class OfflinePlayerLoader {
 	public static Player load(UUID pUUID) {
@@ -24,30 +22,29 @@ public class OfflinePlayerLoader {
 		// Offline inv here...
 
 		try {
-		/*	UUID uuid = matchUser(exactPlayerName);
-			if (uuid == null) {
-				return null;
-			}*/
-			
+			/*
+			 * UUID uuid = matchUser(exactPlayerName);
+			 * if (uuid == null) {
+			 * return null;
+			 * }
+			 */
 
 			OfflinePlayer player = Bukkit.getOfflinePlayer(pUUID);
 			return loadFromOfflinePlayer(player);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		catch (Error e) {
+		} catch (Error e) {
 			e.printStackTrace();
 		}
 
 		return null;
 	}
-	
+
 	public static Player loadFromOfflinePlayer(OfflinePlayer player) {
 		if (player == null) {
 			return null;
 		}
-		
+
 		GameProfile profile = new GameProfile(player.getUniqueId(), player.getName());
 		MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
 		// Create an entity to load the player data
@@ -61,7 +58,7 @@ public class OfflinePlayerLoader {
 			// Return the entity
 			return target;
 		}
-		
+
 		return null;
 	}
 
