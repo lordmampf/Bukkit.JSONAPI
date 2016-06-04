@@ -6,11 +6,11 @@ import java.util.concurrent.ExecutionException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.v1_9_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_9_R1.util.CraftChatMessage;
-import org.bukkit.craftbukkit.v1_9_R1.util.LazyPlayerSet;
-import org.bukkit.craftbukkit.v1_9_R1.util.Waitable;
+import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_9_R2.util.LazyPlayerSet;
+import org.bukkit.craftbukkit.v1_9_R2.util.Waitable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -18,8 +18,8 @@ import org.bukkit.event.player.PlayerChatEvent;
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
 import com.alecgorge.minecraft.jsonapi.util.OfflinePlayerLoader;
 
-import net.minecraft.server.v1_9_R1.EntityPlayer;
-import net.minecraft.server.v1_9_R1.MinecraftServer;
+import net.minecraft.server.v1_9_R2.EntityPlayer;
+import net.minecraft.server.v1_9_R2.MinecraftServer;
 
 @SuppressWarnings("deprecation")
 public class BukkitRealisticChat implements IRealisticChat {
