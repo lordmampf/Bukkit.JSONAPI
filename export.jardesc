@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
+<jardesc>
+    <jar path="C:/Users/Manuel/Desktop/JsonApi.jar"/>
+    <options buildIfNeeded="true" compress="false" descriptionLocation="/Bukkit.JSONAPI/export.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <file path="/Bukkit.JSONAPI/.gitignore"/>
+        <javaElement handleIdentifier="=Bukkit.JSONAPI/src\/test\/java"/>
+        <file path="/Bukkit.JSONAPI/.project"/>
+        <file path="/Bukkit.JSONAPI/README.md"/>
+        <file path="/Bukkit.JSONAPI/pomxml"/>
+        <folder path="/Bukkit.JSONAPI/target"/>
+        <folder path="/Bukkit.JSONAPI/src"/>
+        <folder path="/Bukkit.JSONAPI/sdk"/>
+        <file path="/Bukkit.JSONAPI/.classpath"/>
+        <folder path="/Bukkit.JSONAPI/test"/>
+        <file path="/Bukkit.JSONAPI/plugin.yml"/>
+        <javaElement handleIdentifier="=Bukkit.JSONAPI/src\/main\/java"/>
+        <file path="/Bukkit.JSONAPI/.gitattributes"/>
+        <javaElement handleIdentifier="=Bukkit.JSONAPI/src\/resources"/>
+    </selectedElements>
+</jardesc>
